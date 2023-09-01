@@ -18,30 +18,39 @@ vim.g.ray_config = {
 }
 
 M.override_config = function(params)
-  for k, v in pairs(params) do
-    vim.g.ray_config[k] = v
+  local new_config = vim.g.ray_config
+  if params then
+    for k, v in pairs(params) do
+      new_config[k] = v
+    end
   end
+  return new_config
 end
 
 M.setup = function(params)
-  M.override_config(params)
+  vim.g.ray_config = M.override_config(params)
   vim.api.nvim_command("command! -range Ray :lua require('raysosnap.main').ray_so_snap()")
+end
+
+M.prepend_escape = function(url)
+  local escaped = url:gsub("&", "^&")
+  return escaped
 end
 
 M.ray_so_snap = function()
   local text = M.url_encode(M.encode_base64(M.get_visual_selection()))
   local browser = M.get_browser()
   local options = type(vim.g.ray_config) == "table" and M.get_options() or vim.g.ray_config
-  print(options)
 
-  local url = vim.g.ray_base_url .. '/#code=' .. text .. '&' .. options
+  local url = vim.g.ray_base_url .. '/#code=' .. text .. options
 
   if vim.fn.has('win32') and browser == 'start' and vim.o.shell:match("<cmd.exe$") then
     os.execute(browser .. ' "" "' .. url .. '"')
+  elseif browser == 'cmd.exe /c start' then
+    os.execute(browser .. ' "' .. M.prepend_escape(url) .. '"')
   else
     os.execute(browser .. ' ' .. url)
   end
-  print(vim.inspect(vim.g.ray_config))
 end
 
 M.get_browser = function()
@@ -136,17 +145,17 @@ M.character_requires_url_encoding = function(character)
 end
 
 M.get_visual_selection = function()
-    local start_pos = vim.fn.getpos("'<")
-    local end_pos = vim.fn.getpos("'>")
-    local lines = vim.fn.getline(start_pos[2], end_pos[2])
+  local start_pos = vim.fn.getpos("'<")
+  local end_pos = vim.fn.getpos("'>")
+  local lines = vim.fn.getline(start_pos[2], end_pos[2])
 
-    if #lines == 0 then return "" end
+  if #lines == 0 then return "" end
 
-    -- Modify the start and end lines based on the selection
-    lines[1] = lines[1]:sub(start_pos[3])
-    lines[#lines] = lines[#lines]:sub(1, end_pos[3])
+  -- Modify the start and end lines based on the selection
+  lines[1] = lines[1]:sub(start_pos[3])
+  lines[#lines] = lines[#lines]:sub(1, end_pos[3])
 
-    return table.concat(lines, "\n")
+  return table.concat(lines, "\n")
 end
 
 M.encode_base64 = function(data)

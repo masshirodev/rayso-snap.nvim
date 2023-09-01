@@ -12,11 +12,11 @@ Add this to your pluging list:
     "masshirodev/rayso-snap.nvim",
     init = function()
       require 'raysosnap'.setup({
-        -- ['theme'] = 'midnight',
-        -- ['background'] = 'true',
-        -- ['darkMode'] = 'true',
-        -- ['padding'] = '64',
-        -- ['language'] = 'auto'
+        -- theme = 'candy',
+        -- background = 'true',
+        -- darkMode = 'false',
+        -- padding = '16',
+        -- language = 'auto'
       })
     end
   },
