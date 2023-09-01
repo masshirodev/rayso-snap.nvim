@@ -7,7 +7,7 @@ end
 vim.g.ray_loaded = 1
 
 -- Setup default options
-vim.g.ray_options = vim.g.ray_options or {
+M.config = {
   theme = 'midnight',
   background = 'true',
   darkMode = 'true',
@@ -20,14 +20,18 @@ vim.g.ray_base_url = vim.g.ray_base_url or 'https://ray.so/'
 -- -- Define ray command
 -- vim.api.nvim_command('command! -range Ray :lua require("raysosnap").ray_so_snap()')
 
-M.setup = function()
+M.setup = function(params)
+  for k, v in pairs(params) do
+    M.config[k] = v
+  end
+
   vim.api.nvim_command("command! -range Ray :lua require('raysosnap.main').ray_so_snap()")
 end
 
 M.ray_so_snap = function()
   local text = M.url_encode(M.encode_base64(M.get_visual_selection()))
   local browser = M.get_browser()
-  local options = type(vim.g.ray_options) == "table" and M.get_options() or vim.g.ray_options
+  local options = type(M.config) == "table" and M.get_options() or M.config
 
   local url = vim.g.ray_base_url .. '/#code=' .. text .. '&' .. options
 
@@ -65,7 +69,7 @@ M.get_browser = function()
 end
 
 M.get_options = function()
-  local options = vim.g.ray_options
+  local options = M.config
   local result = ''
 
   for key, value in pairs(options) do
