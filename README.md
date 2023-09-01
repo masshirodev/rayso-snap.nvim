@@ -2,6 +2,20 @@
 
 NVIM plugin to open the selected text in [https://ray.so](https://ray.so)
 
+## Installation
+
+### Lazy.nvim
+
+Add this to your pluging list:
+```lua
+{
+    "masshirodev/rayso-snap.nvim",
+    init = function()
+    require 'raysosnap'.setup()
+    end
+}
+```
+
 ## Usage
 
 Select some text in visual mode and run this command:

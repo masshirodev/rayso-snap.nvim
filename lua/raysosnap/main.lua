@@ -36,9 +36,6 @@ M.ray_so_snap = function()
   else
     os.execute(browser .. ' ' .. url)
   end
-
-  print("Selected text: ", M.get_visual_selection())
-  print("Encoded text: ", M.url_encode(M.encode_base64(M.get_visual_selection())))
 end
 
 M.get_browser = function()
