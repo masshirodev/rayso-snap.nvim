@@ -53,6 +53,14 @@ M.ray_so_snap = function()
   end
 end
 
+M.get_file_name = function()
+  local file_name = vim.fn.expand('%:t')
+  if file_name == '' then
+    return 'untitled'
+  end
+  return file_name
+end
+
 M.get_browser = function()
   -- User-specified browser takes the highest priority
   if vim.g.ray_browser and vim.g.ray_browser ~= '' then
@@ -81,14 +89,16 @@ end
 
 M.get_options = function()
   local options = vim.g.ray_config
+  options['title'] = M.get_file_name()
   local result = ''
 
-  for key, value in pairs(options) do
+  for key, _ in pairs(options) do
     result = result .. '&' .. M.url_encode(key) .. '=' .. M.url_encode(options[key])
   end
 
   return result
 end
+
 M.split = function(inputstr, sep)
   if sep == nil then
     sep = "%s" -- default to splitting by spaces
