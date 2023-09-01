@@ -45,9 +45,9 @@ M.ray_so_snap = function()
   local url = vim.g.ray_base_url .. '/#code=' .. text .. options
 
   if vim.fn.has('win32') and browser == 'start' and vim.o.shell:match("<cmd.exe$") then
-    os.execute(browser .. ' "" "' .. url .. '"')
+    os.execute(browser .. ' "" "' .. url .. '" 2> nul')
   elseif browser == 'cmd.exe /c start' then
-    os.execute(browser .. ' "' .. M.prepend_escape(url) .. '" 2> nul')
+    os.execute(browser .. ' "' .. M.prepend_escape(url) .. '" 2> /dev/null')
   else
     os.execute(browser .. ' ' .. url)
   end
