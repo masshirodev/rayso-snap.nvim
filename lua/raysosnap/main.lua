@@ -32,6 +32,7 @@ M.ray_so_snap = function()
   local text = M.url_encode(M.encode_base64(M.get_visual_selection()))
   local browser = M.get_browser()
   local options = type(vim.g.ray_config) == "table" and M.get_options() or vim.g.ray_config
+  print(options)
 
   local url = vim.g.ray_base_url .. '/#code=' .. text .. '&' .. options
 
